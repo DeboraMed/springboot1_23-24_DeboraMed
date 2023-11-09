@@ -30,7 +30,7 @@ public class UsuarioControlador {
 
     @GetMapping("/{id}")
     public  Usuario getUsuario(@PathVariable Long id){
-        return usuarioRepositorio.findById(id).orElse(null);
+        return usuarioRepositorio.findById(id).orElseThrow(() -> new UsuarioNotFoundException(id));
     }
 
     @PostMapping("/")
