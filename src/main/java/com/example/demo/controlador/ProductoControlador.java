@@ -9,7 +9,7 @@ import com.example.demo.modelo.Producto;
 
 import javax.validation.Valid;
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:63342")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/producto")
 public class ProductoControlador {
