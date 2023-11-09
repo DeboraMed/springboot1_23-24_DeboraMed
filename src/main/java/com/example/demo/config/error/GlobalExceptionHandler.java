@@ -17,4 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUsuarioNotFoundException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ProductoNotFoundException.class)
+    public ResponseEntity<Object> handleProductoNotFoundException(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

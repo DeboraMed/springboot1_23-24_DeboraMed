@@ -1,5 +1,7 @@
 package com.example.demo.controlador;
 
+import com.example.demo.config.error.ProductoNotFoundException;
+import com.example.demo.config.error.UsuarioNotFoundException;
 import com.example.demo.repos.ProductoRepositorio;
 import com.example.demo.repos.UsuarioRepositorio;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -45,7 +47,7 @@ public class ProductoControlador {
                     existingProducto.setPrice(producto.getPrice());
                     return productoRepositorio.save(existingProducto);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Producto not found with id " + id));
+                .orElseThrow(() -> new ProductoNotFoundException(id));
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +57,7 @@ public class ProductoControlador {
                     productoRepositorio.delete(producto);
                     return ResponseEntity.ok().build();
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Producto not found with id " + id));
+                .orElseThrow(() -> new ProductoNotFoundException(id));
     }
 
     // Crear productos asociados a cliente
@@ -66,13 +68,13 @@ public class ProductoControlador {
                     producto.setUsuario(usuario.getUsuario());
                     return productoRepositorio.save(producto);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario not found with id " + id));
+                .orElseThrow(() -> new UsuarioNotFoundException(id));
     }
 
     @PutMapping("/{id}/productos/{productoId}")
     public Producto updateProducto(@PathVariable Long id, @PathVariable Long productoId, @Valid @RequestBody Producto productoRequest) {
         if(!usuarioRepositorio.existsById(id)) {
-            throw new ResourceNotFoundException("Usuario not found with id " + id);
+            throw new UsuarioNotFoundException(id);
         }
 
         return productoRepositorio.findById(productoId)
@@ -81,7 +83,7 @@ public class ProductoControlador {
                     producto.setPrice(productoRequest.getPrice());
                     return productoRepositorio.save(producto);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Producto not found with id " + productoId));
+                .orElseThrow(() -> new ProductoNotFoundException(productoId));
     }
     @GetMapping("/usuario/{usuarioId}")
     public List<Producto> getProductosByUsuario(@PathVariable Long usuarioId) {
