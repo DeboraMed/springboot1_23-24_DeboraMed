@@ -22,4 +22,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleProductoNotFoundException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ProductoAlreadyExistsException.class)
+    public ResponseEntity<Object> handleProductoAlreadyExistsException(Exception ex) {
+        // Elegimos 409 CONFLICT para cuando el producto ya existe. ¿Hay algún código más apropiado?
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }

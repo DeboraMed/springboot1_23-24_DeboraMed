@@ -1,5 +1,6 @@
 package com.example.demo.controlador;
 
+import com.example.demo.config.error.ProductoAlreadyExistsException;
 import com.example.demo.config.error.ProductoNotFoundException;
 import com.example.demo.config.error.UsuarioNotFoundException;
 import com.example.demo.repos.ProductoRepositorio;
@@ -32,10 +33,12 @@ public class ProductoControlador {
     @GetMapping("/{id}")
     Producto getProductoById(@PathVariable Long id)
     {
-        return productoRepositorio.findById(id).orElse(null);
+        return productoRepositorio.findById(id).orElseThrow(() -> new ProductoNotFoundException(id));
     }
     @PostMapping("/")
     public Producto createProducto(@Valid @RequestBody Producto producto) {
+        Producto existingProducto = productoRepositorio.findByName(producto.getName());
+        if (existingProducto!=null) throw new ProductoAlreadyExistsException(existingProducto.getName());
         return productoRepositorio.save(producto);
     }
 
